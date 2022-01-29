@@ -1,0 +1,326 @@
+
+<CreateProjectWindow>:
+    name: "create"
+
+    projectName: projectName
+    projectNumber: projectNumber
+    engineerOfRecord: engineerOfRecord
+    distribution: dist
+
+    FloatLayout:
+        cols:1
+
+        FloatLayout:
+            size: root.width, root.height/2
+
+            Label:
+                text: "Create a New Project"
+                size_hint: 0.8, 0.2
+                pos_hint: {"x":0.1, "top":1}
+                font_size: (root.width**2 + root.height**2) / 14**4
+
+            Label:
+                size_hint: 0.5,0.12
+                pos_hint: {"x":0, "top":0.8}
+                text: "projectName: "
+                font_size: (root.width**2 + root.height**2) / 14**4
+
+            TextInput:
+                pos_hint: {"x":0.5, "top":0.8}
+                size_hint: 0.4, 0.12
+                id: projectName
+                multiline: False
+                font_size: (root.width**2 + root.height**2) / 14**4
+
+            Label:
+                size_hint: 0.5,0.12
+                pos_hint: {"x":0, "top":0.8-0.13}
+                text: "projectNumber: "
+                font_size: (root.width**2 + root.height**2) / 14**4
+
+            TextInput:
+                pos_hint: {"x":0.5, "top":0.8-0.13}
+                size_hint: 0.4, 0.12
+                id: projectNumber
+                multiline: False
+                font_size: (root.width**2 + root.height**2) / 14**4
+
+            Label:
+                size_hint: 0.5,0.12
+                pos_hint: {"x":0, "top":0.8-0.13*2}
+                text: "Engineer of Record: "
+                font_size: (root.width**2 + root.height**2) / 14**4
+
+            TextInput:
+                pos_hint: {"x":0.5, "top":0.8-0.13*2}
+                size_hint: 0.4, 0.12
+                id: engineerOfRecord
+                multiline: False
+                password: False
+                font_size: (root.width**2 + root.height**2) / 14**4
+
+            Label:
+                size_hint: 0.5,0.12
+                pos_hint: {"x":0, "top":0.8-0.13*3}
+                text: "Distribution: "
+                font_size: (root.width**2 + root.height**2) / 14**4
+
+            TextInput:
+                pos_hint: {"x":0.5, "top":0.8-0.13*3}
+                size_hint: 0.4, 0.12
+                id: dist
+                multiline: True
+                font_size: (root.width**2 + root.height**2) / 14**4
+
+        Button:
+            pos_hint:{"x":0.3,"y":0.25}
+            size_hint: 0.4, 0.1
+            font_size: (root.width**2 + root.height**2) / 17**4
+            text: "Looking to Open a Project Instead?"
+            on_release:
+                root.manager.transition.direction = "left"
+                root.open()
+
+        Button:
+            pos_hint:{"x":0.2,"y":0.05}
+            size_hint: 0.6, 0.15
+            text: "Create New Project"
+            font_size: (root.width**2 + root.height**2) / 14**4
+            on_release:
+                root.manager.transition.direction = "left"
+                root.submit()
+
+
+<OpenOrNewProjWindow>:
+    name: "new_open"
+
+    FloatLayout:
+        cols:1
+
+        Button:
+            pos_hint:{"x":0.2,"y":0.25}
+            size_hint: 0.6, 0.2
+            font_size: 32
+            text: "Open Existing Project"
+            on_release:
+                root.manager.transition.direction = "left"
+                root.openProjectBtn()
+
+        Button:
+            pos_hint:{"x":0.2,"y":0.75}
+            size_hint: 0.6, 0.2
+            font_size: 32
+            text: "New Project"
+            on_release:
+                root.manager.transition.direction = "right"
+                root.createNewProjectBtn()
+
+
+
+<OpenProjWindow>:
+
+    name: "open_window"
+    projects: p
+    on_enter: self.update_spinner_projects()
+
+    BoxLayout:
+        orientation: "vertical"
+        size: root.width, root.height
+
+        Label:
+            id: click_label
+            text: "Select Project:"
+            font_size: 32
+
+        Spinner:
+            id: p
+            text: "Select Me to Pick Project"
+            values: root.pick_project()
+            on_text: root.spinner_clicked(p.text)
+
+        Button:
+            font_size: (root.width**2 + root.height**2) / 13**4
+            text: "Go to Project"
+            on_release:
+                root.manager.transition.direction = "up"
+                root.go_to_field_reports(p.text)
+
+        Button:
+            font_size: 20
+            text: "Go Back"
+            on_release:
+                root.manager.transition.direction = "right"
+                root.go_back()
+
+<FieldReportWindow>:
+    name: "field_report"
+    proj: proj
+
+    FloatLayout:
+
+        Label:
+            id: proj
+            size_hint: 0.5,0.1
+            pos_hint: {"x":0, "top":1}
+            text: "test"
+            font_size: 10
+
+        Button:
+            pos_hint:{"x":0.2,"y":0.25}
+            size_hint: 0.6, 0.2
+            font_size: (root.width**2 + root.height**2) / 13**4
+            text: "Create New Item?"
+            on_release:
+                root.manager.transition.direction = "up"
+                root.newItem()
+
+        Button:
+            pos_hint:{"x":0.2,"y":0.6}
+            size_hint: 0.6, 0.2
+            font_size: (root.width**2 + root.height**2) / 17**4
+            text: "Export a Report"
+            on_release:
+                root.manager.transition.direction = "right"
+                root.go_to_export()
+
+        Button:
+            pos_hint:{"x":0.2,"bottom":1}
+            size_hint: 0.4, 0.1
+            font_size: (root.width**2 + root.height**2) / 17**4
+            text: "Main Screen"
+            on_release:
+                root.manager.transition.direction = "down"
+                root.go_to_main()
+
+<NewItemWindow>:
+    name: "new_item"
+
+    location: location
+    description: description
+
+    action: action
+
+    FloatLayout:
+        size: root.width, root.height
+
+        Label:
+            size_hint: 0.5,0.12
+            pos_hint: {"x":0, "top":1}
+            text: "Location: "
+            font_size: 10
+
+        TextInput:
+            size_hint: 0.4, 0.12
+            pos_hint: {"x":0.5, "top":1}
+            id: location
+            multiline: False
+            font_size: 10
+
+        Label:
+            size_hint: 0.5,0.12
+            pos_hint: {"x":0, "top":0.8}
+            text: "Description: "
+            font_size: 10
+
+        TextInput:
+            pos_hint: {"x":0.5, "top":0.8}
+            size_hint: 0.4, 0.1
+            id: description
+            multiline: False
+            font_size: 10
+
+        Button:
+            pos_hint:{"x":0.3,"top":0.6}
+            size_hint: 0.4, 0.1
+            font_size: 10
+            text: "Take a Photo"
+            on_release:
+                root.manager.transition.direction = "down"
+                root.take_photo()
+
+        Spinner:
+            pos_hint:{"x":0.3,"top":0.4}
+            size_hint: 0.4, 0.1
+            id: action
+            text: "Yes or No"
+            values: ['Yes', 'No']
+            on_text: root.spinner_clicked(action.text)
+
+        Button:
+            pos_hint:{"x":.4,"top":0.2}
+            size_hint: 0.2, 0.1
+            font_size: 10
+            text: "Submit"
+            on_release:
+                root.submit(location.text, description.text, action.text)
+
+        Button:
+            pos_hint:{"x":0,"bottom":1}
+            size_hint: 0.3, 0.1
+            font_size: 8
+            text: "Go Back"
+            on_release:
+                root.go_back()
+
+#<CameraWindow>:
+#    name: "camera"
+
+#    BoxLayout:
+#        orientation: "vertical"
+#        Camera:
+#            id: camera
+#            resolution: (640, 480)
+#            play: False
+#        ToggleButton:
+#            text: 'Show me the Photo'
+#            on_press: camera.play = not camera.play
+#            size_hint_y: None
+#            height: '48dp'
+#        Button:
+#            text: 'Capture'
+#            size_hint_y: None
+#            height: '48dp'
+#            on_press:
+#                root.capture()
+#                root.go_back()
+
+<ExportWindow>:
+    name: "export"
+    proj: proj
+
+    FloatLayout:
+
+        Label:
+            id: proj
+            size_hint: 0.5,0.1
+            pos_hint: {"x":0, "top":1}
+            text: "test"
+            font_size: 10
+
+        Button:
+            pos_hint:{"x":0.2,"y":0.25}
+            size_hint: 0.6, 0.2
+            font_size: (root.width**2 + root.height**2) / 13**4
+            text: "Export to .docx"
+            on_release:
+                root.manager.transition.direction = "up"
+                root.export()
+
+        Button:
+            pos_hint:{"x":0.2,"y":0.6}
+            size_hint: 0.6, 0.2
+            font_size: (root.width**2 + root.height**2) / 17**4
+            text: "Go Back"
+            on_release:
+                root.manager.transition.direction = "right"
+                root.go_back()
+
+        Button:
+            pos_hint:{"x":0.2,"bottom":1}
+            size_hint: 0.4, 0.1
+            font_size: (root.width**2 + root.height**2) / 17**4
+            text: "Main Screen"
+            on_release:
+                root.manager.transition.direction = "down"
+                root.go_to_main()
+
